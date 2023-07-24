@@ -20,7 +20,7 @@ Future<void> main(List<String> arguments) async{
 
      }
      else{
-        var text=("NOBODY IS LOGGED IN TO LOGOUT!!");
+        var text=("NOBODY IS LOGGED IN!!");
         print('\x1B[31m$text\x1B[0m');
      }
 }

@@ -11,6 +11,8 @@ import "package:discord/query/add_r_cat.dart" as add_r_cat;
 import "package:discord/query/send_message.dart" as send;
 import "package:discord/query/print_mods.dart" as shows;
 import "package:discord/query/print_cats.dart" as cats;
+import "package:discord/query/send_dm.dart" as send_dm;
+import "package:discord/query/show_dm.dart" as show_dm;
 import "dart:io";
 
 void main() async{
@@ -46,6 +48,10 @@ void main() async{
          await shows.main(arguments);
       case "categories":
           await cats.main(arguments);
+      case "send_dm":
+          await send_dm.main(arguments);
+      case "show_dm":
+          await show_dm.main(arguments);
       default:
          var text=("NOTT A VALID COMMAND REFER THE README FILE!!");
         print('\x1B[31m$text\x1B[0m');

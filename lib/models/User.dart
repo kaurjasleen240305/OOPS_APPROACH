@@ -11,6 +11,8 @@ class User{
     String? user_id;
     String? username;
     String? password;
+ //   List<dynamic>? sender;
+    List<dynamic>? receiver;
     User();
     void setter(username,u_id,password){
         this.user_id=u_id;
@@ -39,6 +41,7 @@ class User{
                 "user_id":Uuid().v1().toString(),
                 "username":name,
                 "password":pass,
+                "reciever":[],
             };
             await users?.insert(store);
             var text3="SUCCESSFULLY REGISTERED";
@@ -59,7 +62,7 @@ class User{
             if(Crypt(user["password"]).match(pass)){
                 var sessobj={"username":name,"session_token":Uuid().v4(),"session_id":user["user_id"]};
                 await sess?.insertOne(sessobj);
-                var text3=("$name IS SUCCESSFULLY REGISTERED");
+                var text3=("$name IS LOGGED IN");
                print('\x1B[32m$text3\x1B[0m');
             }
             else{
@@ -97,6 +100,47 @@ class User{
             var text=("THIS USER IS NOT LOGGED IN PRESENTLY");
             print('\x1B[31m$text\x1B[0m');
         }
+        }
+    }
+
+    Future<void> send_dm(String uname,String message,DbCollection? users,Map<String,dynamic> sess) async{
+        Map<String,dynamic>? receiver=await findUser(uname,users);
+   //     Map<String,dynamic>? sender=await findUser(sess["username"],users);
+        String s=sess["username"];
+        if(receiver!=null){
+            await users?.modernUpdate(
+                where.eq('username',uname),
+                modify.push('reciever', {"$s":message})
+                ); 
+            print("MESSAGE SENT SUCCESSFULLY TO $uname");
+        }
+        else{
+            var text=("THIS USER IS NOT REGISTERED");
+            print('\x1B[31m$text\x1B[0m');
+        }
+    }
+    Future<void> show_dm(String uname,DbCollection? users,Map<String,dynamic> sess) async{
+         Map<String,dynamic>? use=await findUser(uname,users);
+          Map<String,dynamic>? sess_user=await findUser(sess["username"],users);
+         if(use!=null && sess_user!=null){
+            int c=0;
+            for(int i=0;i<sess_user["reciever"].length;i++){
+                for(var key in sess_user["reciever"][i].keys){
+                    if(key==uname){
+                        var text=uname+":"+ " "+sess_user["reciever"][i][key];
+                        print('\x1B[32m$text\x1B[0m');
+                        c+=1;
+                    }
+                }
+            }
+            if(c==0){
+                var text=("SORRY NO MESSAGES BY $uname");
+                print('\x1B[31m$text\x1B[0m');
+            }
+         }
+          else{
+            var text=("THIS USER IS NOT REGISTERED");
+            print('\x1B[31m$text\x1B[0m');
         }
     }
 }
