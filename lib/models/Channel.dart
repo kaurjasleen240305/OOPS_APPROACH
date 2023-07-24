@@ -43,10 +43,10 @@ class Channel{
                 String? creator=await auth.creator_Server(servers,sname);
                 List<dynamic> roles=[];
                 if(ctype=="text" || ctype=="announcement"){
-                   roles=[{"role":"newbie"},{"role":"creator"},{"role":"moderator"}];
+                   roles=[{"role":"newbie"},{"role":"creator"},{"role":"mod"}];
                 }
                 else{
-                     roles=[{"role":"creator"},{"role":"moderator"}];
+                     roles=[{"role":"creator"},{"role":"mod"}];
                 }
             //    print(creator);
                 if(creator==sess["username"]){
@@ -76,7 +76,7 @@ class Channel{
             }
             else{
                 var  text2=("THIS CHANNEL ALREADY EXISTS!!!");
-                 print('\x1B[31m$text2\x1B[0mvar');
+                print('\x1B[31m$text2\x1B[0mvar');
             }
     }
 
@@ -130,7 +130,7 @@ class Channel{
                          String user=sess["username"];
                           await channels?.modernUpdate(
                           where.eq('all',newrole),
-                         modify.push('cmessages', {"$user":role})
+                         modify.push('cmessages', {"$user":message})
                         );
                        var t=("MESSAGE SENT SUCCESSFULLY TO $cname OF $sname");
                         print('\x1B[32m$t\x1B[0m');
@@ -155,7 +155,9 @@ class Channel{
                   else{
                       bool match=false;
                       int n=is_chan["roles"].length;
+                     // print(role);
                       for(int i=0;i<n;i++){
+                        print(is_chan["roles"][i]["role"]);
                         if(is_chan["roles"][i]["role"]==role){
                             match=true;
                         }
