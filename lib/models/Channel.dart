@@ -188,6 +188,35 @@ class Channel{
         }
     }
 
-    
+    Future<void> show_ch_messages(String sname,String channel,String type,int n,DbCollection? channels,DbCollection? servers,Map<String,dynamic> sess) async{
+        final is_chan=await is_channel(channel,sname,type,channels);
+        if(is_chan!=null){
+            Auth auth=Auth();
+            bool match=await auth.user_In_Server(servers,sname,sess["username"]);
+            if(match){
+                int l=is_chan["cmessages"].length;
+                int c=0;
+                for(int i=(n-1);i<l;i++){
+                    for(var key in is_chan["cmessages"][i].keys){
+                        var text=key+":"+is_chan["cmessages"][i][key];
+                         print('\x1B[32m$text\x1B[0m');
+                         c+=1;
+                    }
+                }
+                if(c==0){
+                    var  text2=("SORRY NO MESSAGES IN CHANNEL!!!");
+                print('\x1B[31m$text2\x1B[0m');
+                }
+            }
+            else{
+                 var  text2=("YOU ARE NOT PART OF SERVER AND CANT SEE MESSAGES!!!");
+                print('\x1B[31m$text2\x1B[0m');
+            }
+        }
+        else{
+             var  text2=("THIS CHANNEL DOES NOT EXISTS!!!");
+            print('\x1B[31m$text2\x1B[0m');
+        }
+    }
 
 }

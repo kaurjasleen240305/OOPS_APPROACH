@@ -13,6 +13,7 @@ import "package:discord/query/print_mods.dart" as shows;
 import "package:discord/query/print_cats.dart" as cats;
 import "package:discord/query/send_dm.dart" as send_dm;
 import "package:discord/query/show_dm.dart" as show_dm;
+import "package:discord/query/show_ch_mess.dart" as show_ch_mess;
 import "dart:io";
 
 void main() async{
@@ -52,6 +53,8 @@ void main() async{
           await send_dm.main(arguments);
       case "show_dm":
           await show_dm.main(arguments);
+      case "show_ch_mess":
+           await show_ch_mess.main(arguments);
       default:
          var text=("NOTT A VALID COMMAND REFER THE README FILE!!");
         print('\x1B[31m$text\x1B[0m');
