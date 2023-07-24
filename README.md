@@ -1,6 +1,9 @@
 A sample command-line application.
+
 REQUIREMENTS:-DART VERSION 3.0.5
+
 MONGO_DB VERSION 6.0.2
+
 Fork this project and git clone this project on your remote and enter "dart run" in your terminal...ENJOY :) :)
 
 REGISTER A USER:-
