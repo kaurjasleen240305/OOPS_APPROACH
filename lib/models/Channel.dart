@@ -14,9 +14,10 @@ class Channel{
     String? sname;
     String? cname;
     String? ctype;
-    List<dynamic>? roles;
-    List<dynamic>? category;
+    List<String>? roles;
+    dynamic? category;
     List<dynamic>? c_messages;
+  //  List<String>? mess_type;
     List<String>? all;
     void setter(sname,cname,ctype,roles,category,all){
         this.sname=sname;
@@ -43,10 +44,10 @@ class Channel{
                 String? creator=await auth.creator_Server(servers,sname);
                 List<dynamic> roles=[];
                 if(ctype=="text" || ctype=="announcement"){
-                   roles=[{"role":"newbie"},{"role":"creator"},{"role":"mod"}];
+                   roles=["newbie","creator","mod"];
                 }
                 else{
-                     roles=[{"role":"creator"},{"role":"mod"}];
+                     roles=["creator","mod"];
                 }
             //    print(creator);
                 if(creator==sess["username"]){
@@ -55,9 +56,10 @@ class Channel{
                         "cname":cname,
                         "ctype":ctype,
                         "roles":roles,
-                        "category":[{"category":null}],
+                        "category":null,
                         "c_messages":[],
                         "all":[sname,cname,ctype],
+         //               "mess_type":[],
                     };
                     await channels?.insertOne(to_insert);
                     
@@ -89,7 +91,7 @@ class Channel{
                 List<String> newrole=[sname,cname,ctype];
                 await channels?.modernUpdate(
                 where.eq('all',newrole),
-                modify.push('roles', {"role":role})
+                modify.addToSet('roles', role)
                 );
                 var  text=("ROLE IS ADDED SUCCESSFULLY!!!");
                 print('\x1B[32m$text\x1B[0m');
@@ -112,8 +114,8 @@ class Channel{
             bool match=await auth.user_In_Server(servers,sname,sess["username"]);
             if(match){
                String role=await auth.user_Role_In_Server(servers,sname,sess["username"]);
-               int n=is_chan["category"].length;
-               var cate=is_chan["category"][n-1]["category"];
+               var cate=is_chan["category"];
+            //   var cate=is_chan["category"][n-1]["category"];
                if(cate!=null){
                   Category cat =Category();
                   Map<String,dynamic>? get_c=await cat.get_category(sname,cate,categories);
@@ -121,7 +123,7 @@ class Channel{
                   bool match=false;
                       int n=get_c["roles"].length;
                       for(int i=0;i<n;i++){
-                        if(get_c["roles"][i]["role"]==role){
+                        if(get_c["roles"][i]==role){
                             match=true;
                         }
                       }
@@ -132,6 +134,7 @@ class Channel{
                           where.eq('all',newrole),
                          modify.push('cmessages', {"$user":message})
                         );
+                       
                        var t=("MESSAGE SENT SUCCESSFULLY TO $cname OF $sname");
                         print('\x1B[32m$t\x1B[0m');
                       } 
@@ -147,8 +150,9 @@ class Channel{
                     String user=sess["username"];
                     await channels?.modernUpdate(
                      where.eq('all',newrole),
-                     modify.push('cmessages', {"$user":role})
+                     modify.push('cmessages', {"$user":message})
                     );
+                    
                     var text=("MESSAGE SENT SUCCESSFULLY TO $cname OF $sname");
                      print('\x1B[32m$text\x1B[0m');
                   }
@@ -167,8 +171,9 @@ class Channel{
                          String user=sess["username"];
                           await channels?.modernUpdate(
                           where.eq('all',newrole),
-                         modify.push('cmessages', {"$user":role})
+                         modify.push('cmessages', {"$user":message})
                         );
+                      
                        var t=("MESSAGE SENT SUCCESSFULLY TO $cname OF $sname");
                         print('\x1B[32m$t\x1B[0m');
                       } 
@@ -198,9 +203,9 @@ class Channel{
             if(match){
                 int l=is_chan["cmessages"].length;
                 int c=0;
-                for(int i=(n-1);i<l;i++){
+                for(int i=(l-1);i>(l-n-1);i--){
                     for(var key in is_chan["cmessages"][i].keys){
-                        var text=key+":"+is_chan["cmessages"][i][key];
+                        var text=(type)+":"+key+":"+is_chan["cmessages"][i][key];
                          print('\x1B[32m$text\x1B[0m');
                          c+=1;
                     }

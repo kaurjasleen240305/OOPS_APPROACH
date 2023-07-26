@@ -12,8 +12,8 @@ import "package:uuid/uuid.dart";
 class Category{
     String? sname;
     String? cat_name;
-    List<dynamic>? channels;
-    List<dynamic>? roles;
+    List<String>? channels;
+    List<String>? roles;
     List<dynamic>? all;
     
     void setter(sname,cat_name,roles,channels){
@@ -77,11 +77,11 @@ class Category{
                  List<String> newall=[sname,cat];
                 await categories?.modernUpdate(
                 where.eq('all',newall),
-                modify.push('channels', {"channel":cname})
+                modify.addToSet('channels', cname)
                 );
                 await channels?.modernUpdate(
                     where.eq('cname',cname),
-                    modify.push("category",{"category":cat}),
+                    ModifierBuilder().set('category',cat)
                 );
                 var text=("CHANNEL ADDED SUCCESSFULLY TO $cname OF $sname");
                 print('\x1B[32m$text\x1B[0m');
@@ -106,7 +106,7 @@ class Category{
                List<String> newrole=[sname,cat];
                 await categories?.modernUpdate(
                 where.eq('all',newrole),
-                modify.push('roles', {"role":role})
+                modify.push('roles',role)
                 );
                 var  text=("ROLE IS ADDED SUCCESSFULLY TO THIS CATEGORY!!!");
                 print('\x1B[32m$text\x1B[0m');

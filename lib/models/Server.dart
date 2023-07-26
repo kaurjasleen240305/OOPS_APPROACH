@@ -11,14 +11,14 @@ class Server{
     String? creator;
     List<dynamic>? members;
     List<dynamic>? channels;
-    List<dynamic>? categories;
+  //  List<dynamic>? categories;
     List<dynamic>? roles;
-    void setter(sname,creator,members,channels,categories){
+    void setter(sname,creator,members,channels){
         this.sname=sname;
         this.creator=creator;
         this.members=members;
         this.channels=channels;
-        this.categories=categories;
+   //     this.categories=categories;
     }
     Future< Map<String,dynamic>?> is_Server(String server,DbCollection? servers) async{
         Map<String,dynamic>? ser;
@@ -37,7 +37,7 @@ class Server{
             creator=ser_Data["creator"];
             members=ser_Data["members"];
             channels=ser_Data["channels"];
-            categories=ser_Data["categories"];
+      //      categories=ser_Data["categories"];
         }
     } 
 
@@ -47,9 +47,9 @@ class Server{
             "creator":creator,
             "members":[{creator:"mod"},],
             "channels":[],
-            "categories":[],
+       //     "categories":[],
         };
-        setter(server,creator,[{creator:"mod"},],[],[]);
+        setter(server,creator,[{creator:"mod"},],[]);
         await servers?.insertOne(ser_obj);
     }
     bool is_member(String name,Map<String,dynamic> given){
